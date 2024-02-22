@@ -5,3 +5,8 @@
 .sortable:hover{
     opacity: 0.9;
 }
+
+.table img{
+    width: auto;
+    height: 50px;
+}

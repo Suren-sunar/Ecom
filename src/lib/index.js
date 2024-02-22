@@ -53,3 +53,15 @@ export const delStorage = (key)=>{
     localStorage.removeItem(key) 
     sessionStorage.removeItem(key)
 }
+
+
+/**
+ * Return url for the given image file.
+ * 
+ * @param {string} filename Name of  image file
+ * @returns string
+ */
+
+export const imgUrl = filename =>{
+    return`${import.meta.env.VITE_API_URL}/image/${filename}`
+}
