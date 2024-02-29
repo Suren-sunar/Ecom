@@ -10,17 +10,17 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store ={store}>
     <App />
     </Provider>
-    <ToastContainer
-position="bottom-left"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="colored"/>
+      <ToastContainer
+  position="bottom-left"
+  autoClose={5000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="colored"/>
 
   </React.StrictMode>,
 )

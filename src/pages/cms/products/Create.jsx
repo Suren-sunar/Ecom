@@ -17,42 +17,56 @@ export const Create = () => {
     initialValues: {
       name: "",
       summary: "",
-      discription: "",
+      description: "",
       price: "",
       discounted_price: "",
-      categorId: "",
+      categoryId: "",
       brandId: "",
-      images: undefined,
+      images: [],
       featured: "false",
       status: true,
     },
-    validationSchema: Yup.object({
+    validationSchema: Yup.object().shape({
       name: Yup.string().required(),
       summary: Yup.string().required(),
-      discription: Yup.string().required(),
+      description: Yup.string().required(),
       price: Yup.string().required(),
-      discounted_price: Yup.string().required().nullable(),
-      categorId: Yup.string().required("category is a required field."),
+      // discounted_price: Yup.string().required().nullable(),
       brandId: Yup.string().required("Brand is a required field."),
+      categoryId: Yup.string().required("category is a required field."),
       images: Yup.mixed()
-        .required()
-        .test("fileType", "images must be valid format", (files) => {
+        .test(
+          "fileCount",
+          "one image must be selected",
+          (files) => files.length > 0
+        )
+        .test("fileType", "images must be of valid type", (files) => {
           for (let file of files) {
-            if (!file.type.startsWith("/image")) {
+            if (!file.type.startsWith("image/")) {
               return false;
             }
-            return true;
           }
+          return true;
+        })
+        .test("fileSize", "Images must not be larger than 5MB", (files) => {
+          for (let file of files) {
+            if (file.size > 5 * 1024 * 1024) {
+              return false;
+            }
+          }
+          return true;
         }),
+
       featured: Yup.string().required(),
       status: Yup.boolean().required(),
     }),
     onSubmit: (values, { setSubmitting }) => {
+      console.log(values)
       let fd = new FormData();
 
       for (let k in values) {
         if (k == "images") {
-          for (let img in values[k]) {
+          for (let img of values[k]) {
             fd.append(k, img);
           }
         } else {
@@ -60,9 +74,11 @@ export const Create = () => {
         }
       }
 
-      http
-        .post("/cms/products", fd, {
-          "Content-Type": "Multipart/form-data",
+      http.post("/cms/products", fd, {
+        headers:{
+          "Content-Type": "multipart/form-data",
+        }
+          
         })
         .then(() => navigate("/cms/products"))
         .catch((err) => console.error(err))
@@ -75,7 +91,7 @@ export const Create = () => {
 
     http
       .get("/cms/categories")
-      .then((data) => {
+      .then(({data}) => {
         setCategories(data);
 
         return http.get("/cms/brands");
@@ -107,8 +123,8 @@ export const Create = () => {
               />
               <InpField
                 formik={formik}
-                name="discription"
-                label="Discription"
+                name="description"
+                label="Description"
                 isTextArea
               />
               <InpField
@@ -135,7 +151,7 @@ export const Create = () => {
                 >
                   <option value="">Select a brand</option>
                   {brand.map((brand) => (
-                    <option value={brand.id} key={brand._id}>
+                    <option value={brand._id} key={brand._id}>
                       {brand.name}
                     </option>
                   ))}
@@ -159,9 +175,9 @@ export const Create = () => {
                   }
                 >
                   <option value="">Select a Category</option>
-                  {brand.map((categories) => (
-                    <option value={categories.id} key={categories._id}>
-                      {categories.name}
+                  {categories.map((category) => (
+                    <option value={category._id} key={category._id}>
+                      {category.name}
                     </option>
                   ))}
                 </Form.Select>
@@ -210,22 +226,36 @@ export const Create = () => {
                 )}
               </div>
               <div className="mb-3">
-                <Form.Label htmlFor='images'>Images</Form.Label>
-                <Form.Control 
-                type='file'
-                name='images'
-                id='images'
-                accept="image/*"
-                multiple
-                value={ formik.values[images]}
-                onChange={formik.setFieldValue('images',target.files)} 
-                onBlur={formik.handleBlur}
-                isValid={formik.touched[images] && formik.values[images]}
-                isInvalid={formik.touched[images] && formik.errors[images]} />
+                <Form.Label htmlFor="images">Images</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="images"
+                  id="images"
+                  accept="image/*"
+                  multiple
+                  onChange={({ target }) =>
+                    formik.setFieldValue("images", target.files)
+                  }
+                  onBlur={formik.handleBlur}
+                  isValid={formik.touched["images"] && !formik.errors["images"]}
+                  isInvalid={
+                    formik.touched["images"] && formik.errors["images"]
+                  }
+                />
 
-                {formik.touched[images] && formik.errors[images] && 
-                <Form.Control.Feedback type="invalid">{formik.errors[images]}</Form.Control.Feedback>}
-            </div>
+                {formik.touched["images"] && formik.errors["images"] && (
+                  <Form.Control.Feedback type="invalid">
+                    {formik.errors["images"]}
+                  </Form.Control.Feedback>
+                )}
+                {
+                  formik.values.images.length > 0 && <Row>
+                    {Array.from(formik.values.images).map((image, i)=> <Col lg={3} key={i} className="mt-3"> 
+                      <img className="img-fluid" src={URL.createObjectURL(image)} alt="" />
+                    </Col>)}
+                  </Row>
+                }
+              </div>
               <SubmitBtn loading={formik.isSubmitting} />
             </Form>
           )}

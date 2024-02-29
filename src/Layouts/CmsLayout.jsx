@@ -42,13 +42,22 @@ export const CmsLayout = () => {
                                 <NavLink to='/cms/categories' className="nav-link"><i className='bi-list me-2'></i>Categories</NavLink>
                             </Nav.Item>
                             <Nav.Item>
-                                <NavLink to='/cms/brands' className="nav-link"><i className='me-2'></i>Brand</NavLink>
+                                <NavLink to='/cms/brands' className="nav-link"><i className='bi-star me-2'></i>Brand</NavLink>
                             </Nav.Item>
 
                             <Nav.Item>
                                 <NavLink to='/cms/products' className="nav-link"><i className='bi-gift me-2'></i>Products</NavLink>
                             </Nav.Item>
+
+                            <Nav.Item>
+                                <NavLink to='/cms/orders' className="nav-link"><i className='bi-basket me-2'></i>Orders</NavLink>
+                            </Nav.Item>
+
+                            <Nav.Item>
+                                <NavLink to='/cms/reviews' className="nav-link"><i className='bi-chat me-2'></i>Reviews</NavLink>
+                            </Nav.Item>
                         </Nav>
+                        
                         
                         <Nav>
                             <NavDropdown title={<><i className='bi-person-circle me-2'></i>{user.name}</>} align='end'>
