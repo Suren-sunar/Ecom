@@ -119,7 +119,7 @@ export const FrontLayout = () => {
                         </a>
                       </li>
                      <NavDropdown title="Categories">
-                        {categories.map(category=><Link to="" className="dropdown-item" key={categories._id}>
+                        {categories.map(category=><Link to={`/category/${category._id}`} className="dropdown-item" key={categories._id}>
                         {category.name}
                         </Link>)}
                          
