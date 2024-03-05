@@ -7,6 +7,7 @@ export const FrontRoutes = () => <Routes>
 
         <Route index element={<Front.Pages.Home/>}/>
         <Route path="category/:id" element={<Front.Pages.Category/>}/>
+        <Route path="brand/:id" element={<Front.Pages.Brand/>}/>
 
 </Route>
 

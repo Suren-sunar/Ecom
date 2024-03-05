@@ -3,8 +3,8 @@ import http from "@/http";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-export const Category = () => {
-  const [category, setCategory] = useState({});
+export const Brand = () => {
+  const [brand, setBrand] = useState({});
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -14,10 +14,10 @@ export const Category = () => {
     setLoading(true);
 
     http
-      .get(`/categories/${params.id}`)
+      .get(`/brands/${params.id}`)
       .then(({ data }) => {
-        setCategory(data);
-        return http.get(`categories/${params.id}/products`);
+        setBrand(data);
+        return http.get(`brands/${params.id}/products`);
       })
       .then(({ data }) => setProducts(data))
       .catch((err) => {})
@@ -35,7 +35,7 @@ export const Category = () => {
               <>
                 <div className="row">
                   <div className="col-12 text-center text-uppercase">
-                    <h2>{category.name}</h2>
+                    <h2>{brand.name}</h2>
                   </div>
                 </div>
               </>

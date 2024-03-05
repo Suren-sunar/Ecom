@@ -125,7 +125,7 @@ export const FrontLayout = () => {
                          
                      </NavDropdown>
                      <NavDropdown title="Brands">
-                        {brands.map(brand=><Link to="" className="dropdown-item" key={brand._id}>
+                        {brands.map(brand=><Link to={`/brand/${brand._id}`} className="dropdown-item" key={brand._id}>
                         {brand.name}
                         </Link>)}
                          
