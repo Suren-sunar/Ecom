@@ -2,13 +2,10 @@ import { BrowserRouter, Routes } from "react-router-dom";
 import { CmsRoutes } from "./CmsRoutes";
 import { FrontRoutes } from "./FrontRoutes";
 
-export const AllRoutes =() => <BrowserRouter>
+export const AllRoutes = () => (
+  <BrowserRouter>
+    <CmsRoutes />
+    <FrontRoutes />
 
-
-
-
-
-<CmsRoutes/>
-
-<FrontRoutes/>
-</BrowserRouter>
+  </BrowserRouter>
+);

@@ -10,6 +10,8 @@ export const FrontRoutes = () => <Routes>
         <Route path="brand/:id" element={<Front.Pages.Brand/>}/>
         <Route path="product/:id" element={<Front.Pages.Detail/>}/>
 
+        {/* <Route path="*" element={<Front.Pages.Error/>}/> */}
+
 </Route>
 
 

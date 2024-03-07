@@ -1,13 +1,14 @@
-import { Loading } from "@/components";
+import { Loading, ProductList } from "@/components";
 import http from "@/http";
 import { imgUrl } from "@/lib";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export const Detail = () => {
   const [product, setProduct] = useState({images:[]});
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [bigImg, setBigImg]=useState('')
 
   const params = useParams();
 
@@ -21,6 +22,7 @@ export const Detail = () => {
       .get(`products/${params.id}`)
       .then(({ data }) => {
         setProduct(data);
+        setBigImg(data.images[0])
         return http.get(`products/${params.id}/similar`);
       })
       .then(({ data }) => {
@@ -39,14 +41,14 @@ export const Detail = () => {
               <div className="col-12 mb-3">
                 <div
                   className="img-large border"
-                  style={{backgroundImage: `url('${imgUrl(product.images[0])}')`}}
+                  style={{backgroundImage: `url('${imgUrl(bigImg)}')`}}
                 ></div>
               </div>
               <div className="col-12">
                 <div className="row">
-                  {product.images.map((image,i)=> <div
+                  {product.images?.map((image,i)=> <div
                   className="col-sm-2 col-3" key={i}>
-                    <div className="img-small border" style={{backgroundImage:`url('${imgUrl(image)}')`}}>
+                    <div className="img-small border" style={{backgroundImage:`url('${imgUrl(image)}')`}} onMouseEnter={()=>setBigImg(image)} onClick={()=>setBigImg(image)}>
 
                     </div>
 
@@ -57,37 +59,16 @@ export const Detail = () => {
 
             <div className="col-lg-5 col-md-9">
               <div className="col-12 product-name large">
-                Area 51M Gaming Laptop Welcome to A New ERA with 9TH GEN Intel
-                CORE I9-9900K NVIDIA GEFORCE RTX 2080 8GB GDDR6 17.3" FHD 144HZ
-                AG G-SYNC TOBII EYETRACKING (1TB SSD RAID|32GB RAM|10 PRO)
+               {product.name}
                 <small>
-                  By <a href="#">Dell</a>
+                  By <Link to={`/brand/${product.brandId}`}>{product.brand?.name}</Link>
                 </small>
               </div>
               <div className="col-12 px-0">
                 <hr />
               </div>
               <div className="col-12">
-                <ul>
-                  <li>
-                    Processor 8th Generation Intel Core i9-8950HK (6-Core, 12MB
-                    Cache, Overclocking up to 5.0GHz)
-                  </li>
-                  <li>
-                    Memory 32GB DDR4-2666MHz, 2x16GB Ram Speed Gaming
-                    Performance
-                  </li>
-                  <li>
-                    Hard Drive 1TB SSD RAID 0 (2x 512GB PCIe NVME M.2 SSDs) +
-                    1TB (+8GB SSHD) Hybrid Drive
-                  </li>
-                  <li>
-                    17.3" Full HD display 1920 x 1080 resolution boasts
-                    impressive color and clarity. IPS technology for wide
-                    viewing angles.
-                  </li>
-                  <li>Video Card NVIDIA® GeForce® RTX 2080 with 8GB GDDR6</li>
-                </ul>
+               {product.summary}
               </div>
             </div>
 
@@ -95,8 +76,9 @@ export const Detail = () => {
               <div className="col-12 sidebar h-100">
                 <div className="row">
                   <div className="col-12">
-                    <span className="detail-price">$2,500</span>
-                    <span className="detail-price-old">$2,800</span>
+                   {product.discounted_price ?
+                  <>  <span className="detail-price">Rs. {product.discounted_price}</span>
+                  <span className="detail-price-old">Rs. {product.price}</span> </>: <span className="detail-price">Rs. {product.price}</span>}
                   </div>
                   <div className="col-xl-5 col-md-9 col-sm-3 col-5 mx-auto mt-3">
                     <div className="mb-3">
@@ -140,135 +122,9 @@ export const Detail = () => {
                       <u>Details</u>
                     </h2>
                   </div>
-                  <div className="col-12" id="details">
-                    <h4>OPERATING SYSTEM</h4>
-
-                    <p>
-                      <strong>Available with Windows 10 Home:</strong> Gaming is
-                      better than ever on Windows 10, with games in 4K, DirectX
-                      12, and streaming your gameplay*.
-                    </p>
-                    <hr />
-                    <h4>CONSIDER THE GAME CHANGED</h4>
-
-                    <p>
-                      The Alienware Area-51m is unlike any mobile gaming machine
-                      ever created. With unprecedented desktop-level processing
-                      power, CPU and GPU upgradability, advanced cooling and a
-                      premium, revolutionary design, a true desktop-gaming
-                      experience is now available in the form of a laptop.
-                    </p>
-                    <hr />
-                    <h4>DESKTOP POWER PACKED INTO A LAPTOP</h4>
-
-                    <p>
-                      The Area-51m features a host of firsts for peak
-                      performance and power. It’s our first-ever Alienware
-                      laptop to feature 8-core, 16-thread Intel® processors,
-                      giving it a whole new level of compute power versus other
-                      gaming laptops. Engineered with desktop processors, the
-                      CPU is enabled with up to 125% rated power, allowing
-                      high-end overclocking. This results in higher performance
-                      for megatasking, CPU-intensive gaming, as well as
-                      day-to-day applications.
-                    </p>
-
-                    <p>
-                      Lose yourself in vivid, uninterrupted gaming thanks to
-                      NVIDIA® GeForce RTX™ graphics with full-throttle power and
-                      up to 30W of overclocking headroom—all on an immersive
-                      144Hz G-SYNC 17" Full HD display. Users can overclock
-                      their settings via the new Alienware Command Center.
-                    </p>
-
-                    <p>
-                      The Area-51m is also our first-ever Alienware laptop to
-                      support up to 64GB of DDR4 memory, ensuring you have
-                      enough RAM for even the most performance-intensive tasks.
-                    </p>
-                    <hr />
-                    <h4>UNPRECEDENTED UPGRADEABILITY</h4>
-
-                    <p>
-                      Gamers have made it clear that they’ve noticed a lack of
-                      CPU and GPU upgradability in gaming laptops.
-                    </p>
-
-                    <p>
-                      The Area-51m was engineered with this in mind, finally
-                      allowing gamers to harness power comparable to even the
-                      highest-performance desktop, and taking advantage of
-                      latest technologies from NVIDIA® such as ray tracing,
-                      DLSS, and AI enhanced graphics.
-                    </p>
-
-                    <p>
-                      CPU upgrades can be done using standard desktop-className
-                      processors, while GPU upgrades can be done via onboard
-                      graphics module replacement or with the Alienware Graphics
-                      Amplifier.
-                    </p>
-                    <hr />
-                    <h4>ADVANCED ALIENWARE CRYO-TECH COOLING</h4>
-
-                    <p>
-                      Our thermal technology, Advanced Alienware Cryo-Tech v2.0,
-                      optimizes component cooling, which maximizes overall
-                      performance and keeps your laptop cool to the touch.
-                      Here’s a closer look at our innovative cooling solution.
-                    </p>
-
-                    <p>
-                      <strong>Dual-Intake, Dual-Exhaust Airflow Design:</strong>{" "}
-                      The Area-51m chassis prioritizes performance with a dual
-                      fan design that pulls in cool air from the bottom and top
-                      vents, while exhaling exhaust out the rear and side vents
-                      for optimal core component cooling. (The Intel® Core™
-                      i7-8700 with NVIDIA® GeForce RTX™ 2060 configuration does
-                      not have a side-exhaust)
-                    </p>
-
-                    <p>
-                      <strong>High Voltage Driving Fan:</strong> The fire
-                      resistant, liquid-crystal polymer fan is built with 0.2mm
-                      blades, sleeve bearings and 3-phase fan control to create
-                      less friction and circulate air more efficiently. The
-                      Area-51m fans occupy an area of 95x105mm with a thickness
-                      ranging from 19mm to 21.5mm and can push over 25 CFM in
-                      open air conditions—something normally seen only in
-                      desktops.
-                    </p>
-
-                    <p>
-                      <strong>Load-balancing Heat Pipes:</strong> The dynamics
-                      of thermal activity across critical components like the
-                      GPU and the CPU are intelligently discharged across
-                      various dedicated and shared 8mm and 6mm copper-composite
-                      heat pipes.The highest-end configurations carry 7 total
-                      heat pipes.
-                    </p>
-
-                    <p>
-                      <strong>Copper Fin Stacks:</strong> The Area-51m features
-                      best-in-className surface temperatures, largely due to a
-                      thermal module, including four 0.15mm copper fins.Heat is
-                      drawn away from the most critical components to prioritize
-                      system performance and longevity.
-                    </p>
-
-                    <p>
-                      <strong>Thermal Control:</strong> Cryo-Tech v2.0 ensures
-                      that 100% of the system's GPU thermal design power is
-                      enabled, while also ensuring CPU-intensive games benefit
-                      from high performance.
-                    </p>
-
-                    <p>
-                      <strong>Whisper-quiet:</strong> The cooling system of the
-                      Area-51m is so powerful, virtually no noise is heard while
-                      engaged in daily tasks.
-                    </p>
-                  </div>
+                  <div className="col-12" id="details" dangerouslySetInnerHTML={{__html: product.description}}/>
+                   
+                  
                 </div>
               </div>
             </div>
@@ -520,43 +376,7 @@ export const Detail = () => {
           </div>
         </div>
 
-        <div className="col-12">
-          <div className="row">
-            <div className="col-12 py-3">
-              <div className="row">
-                <div className="col-12 text-center text-uppercase">
-                  <h2>Similar Products</h2>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-lg-3 col-sm-6 my-3">
-                  <div className="col-12 bg-white text-center h-100 product-item">
-                    <div className="row h-100">
-                      <div className="col-12 p-0 mb-3">
-                        <a href="product.html">
-                          <img src="images/image-4.jpg" className="img-fluid" />
-                        </a>
-                      </div>
-                      <div className="col-12 mb-3">
-                        <a href="product.html" className="product-name">
-                          Dell Alienware Area 51
-                        </a>
-                      </div>
-                      <div className="col-12 mb-3">
-                        <span className="product-price">$4,500</span>
-                      </div>
-                      <div className="col-12 mb-3 align-self-end">
-                        <button className="btn btn-outline-dark" type="button">
-                          <i className="fas fa-cart-plus me-2"></i>Add to cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+       {similar.length > 0 &&  <ProductList products={similar} title='Similar Products'/>}
       </main>}
     </div>
   );
