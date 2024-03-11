@@ -5,8 +5,10 @@ import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import http from "@/http";
 import { NavDropdown } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 export const FrontLayout = () => {
+  const cart = useSelector(state => state.cart.value)
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
 
