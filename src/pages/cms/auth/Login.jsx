@@ -32,7 +32,7 @@ export const Login=({to = '/cms/dashboard', isCustomerLogin=false}) =>{
 
                         setStorage('react_ecom_token', data.token , values.remember)
                         
-                        navigate('/')
+                        navigate(to)
                     }
                     else{
                         formik.setFieldError('email', 'invalid mail address')
@@ -44,7 +44,7 @@ export const Login=({to = '/cms/dashboard', isCustomerLogin=false}) =>{
 
                         setStorage('react_ecom_token', data.token , values.remember)
                         
-                        navigate(to)
+                        navigate('/cms/dashboard')
                     }
                     else{
                         formik.setFieldError('email', 'invalid mail address')

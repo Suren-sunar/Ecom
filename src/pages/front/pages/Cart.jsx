@@ -111,7 +111,8 @@ export const Cart = () => {
                                 defaultValue={item.qty}
                                 onChange={({ target }) =>
                                   handleQtyChange(
-                                    (item.product, parseInt(target.value))
+                                    item.product,
+                                    parseInt(target.value)
                                   )
                                 }
                               />
