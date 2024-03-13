@@ -1,4 +1,4 @@
-import { Loading, ProductList } from "@/components";
+import { CartBtn, Loading, ProductList } from "@/components";
 import http from "@/http";
 import { imgUrl } from "@/lib";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ export const Detail = () => {
   const [similar, setSimilar] = useState([]);
   const [loading, setLoading] = useState(false);
   const [bigImg, setBigImg]=useState('')
+  const [qty,setQty]=useState(1)
 
   const params = useParams();
 
@@ -87,16 +88,16 @@ export const Detail = () => {
                         type="number"
                         id="qty"
                         min="1"
-                        value="1"
+                        value={qty}
                         className="form-control"
                         required
+                        onChange={(({target})=> setQty(parseInt(target.value)))}
                       />
                     </div>
                   </div>
                   <div className="col-12 mt-3">
-                    <button className="btn btn-outline-dark" type="button">
-                      <i className="fas fa-cart-plus me-2"></i>Add to cart
-                    </button>
+                    
+                  <CartBtn product={product} qty={qty}/>
                   </div>
                   <div className="col-12 mt-3">
                     <button

@@ -32,13 +32,13 @@ export const Home = () => {
         <div className="col-12 px-0">
         <Carousel>
       <Carousel.Item>
-        <img src="public/slider-1.jpg" className='d-block w-100'alt="" />
+        <img src="/slider-1.jpg" className='d-block w-100'alt="" />
       </Carousel.Item>
       <Carousel.Item>
-        <img src="public/slider-2.jpg" className='d-block w-100'alt="" />
+        <img src="/slider-2.jpg" className='d-block w-100'alt="" />
       </Carousel.Item>
       <Carousel.Item>
-        <img src="public/slider-3.jpg" className='d-block w-100'alt="" />
+        <img src="/slider-3.jpg" className='d-block w-100'alt="" />
       </Carousel.Item>
     </Carousel>
         </div>

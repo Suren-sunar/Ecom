@@ -18,7 +18,7 @@ export const CartBtn = ({ product, qty = 1 }) => {
       qty: q,
     };
     dispatch(addToCart(temp));
-    toast.success(`${product.name}added to cart`);
+    toast.success(`${product.name} added to cart`);
   };
   return (
     <button

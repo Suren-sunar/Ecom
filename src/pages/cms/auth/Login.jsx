@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux"
 import { Navigate, useNavigate } from "react-router-dom"
 import { setUser } from "../../../store"
 
-export const Login=() =>{
+export const Login=({to = '/cms/dashboard', isCustomerLogin=false}) =>{
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -26,16 +26,30 @@ export const Login=() =>{
         onSubmit:(values, {setSubmitting})=>{
             http.post('/login', values)
                 .then(({data}) =>{
-                    if(data.user.type !== 'Customer'){
+                   if(isCustomerLogin){
+                    if(data.user.type == 'Customer'){
                         dispatch(setUser(data.user))
 
                         setStorage('react_ecom_token', data.token , values.remember)
                         
-                        navigate('/cms/dashboard')
+                        navigate('/')
                     }
                     else{
                         formik.setFieldError('email', 'invalid mail address')
                     }
+                    
+                   }else{
+                    if(data.user.type != 'Customer'){
+                        dispatch(setUser(data.user))
+
+                        setStorage('react_ecom_token', data.token , values.remember)
+                        
+                        navigate(to)
+                    }
+                    else{
+                        formik.setFieldError('email', 'invalid mail address')
+                    }
+                   }
                    
                 })
                 .catch(err =>{})

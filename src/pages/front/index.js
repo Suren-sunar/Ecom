@@ -1,3 +1,3 @@
 import * as Pages from './pages'
-
-export{Pages}
+import * as User from './pages/User'
+export{Pages,User}

@@ -23,7 +23,7 @@ if(Object.keys(user).length == 0){
         setLoading(true)
         http.get('profile/details')
         .then(({data})=> dispatch(setUser(data)))
-        .catch(err => navigate('/login'))
+        .catch(err => navigate('/cms/login'))
         .finally(() =>setLoading(false))
 
     }else{

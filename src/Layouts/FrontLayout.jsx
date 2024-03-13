@@ -5,12 +5,39 @@ import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import http from "@/http";
 import { NavDropdown } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { object } from "yup";
+import { clearUser } from "@/store";
+import { config, delStorage } from "@/lib";
 
 export const FrontLayout = () => {
-  const cart = useSelector(state => state.cart.value)
+  const cart = useSelector((state) => state.cart.value);
+  const user = useSelector((state) => state.user.value);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [qty, setQty] = useState(0);
+  const [price, setPrice] = useState(0);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (Object.keys(cart).length > 0) {
+      let q = 0,
+        p = 0;
+
+      for (let k in cart) {
+        let product = cart[k].product;
+
+        q += cart[k].qty;
+        p +=
+          parseFloat(product.discounted_price || product.price) * cart[k].qty;
+      }
+      setQty(q);
+      setPrice(p);
+    } else {
+      setQty(0);
+      setPrice(0);
+    }
+  }, [cart]);
 
   useEffect(() => {
     http
@@ -24,6 +51,13 @@ export const FrontLayout = () => {
       })
       .catch((err) => {});
   }, []);
+
+  const handleLogout = () => {
+    e.preventDefault();
+
+    dispatch(clearUser());
+    delStorage(config("token_name"));
+  };
 
   return (
     <div className="container-fluid">
@@ -47,18 +81,34 @@ export const FrontLayout = () => {
                   </ul>
                 </div>
                 <div className="col-auto">
-                  <ul className="top-nav">
-                    <li>
-                      <a href="register.html">
-                        <i className="fas fa-user-edit me-2"></i>Register
-                      </a>
-                    </li>
-                    <li>
-                      <a href="login.html">
-                        <i className="fas fa-sign-in-alt me-2"></i>Login
-                      </a>
-                    </li>
-                  </ul>
+                  {Object.keys(user).length > 0 ? (
+                    <ul className="top-nav">
+                      <li>
+                        <Link to="/user">
+                          <i className="fas fa-user me-2"></i>
+                          {user.name}
+                        </Link>
+                      </li>
+                      <li>
+                        <a href="/logout" onClick={handleLogout}>
+                          <i className="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                      </li>
+                    </ul>
+                  ) : (
+                    <ul>
+                      <li>
+                        <Link to="/register">
+                          <i className="fas fa-user me-2"></i>Register
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/login">
+                          <i className="fas fa-sign me-2"></i>Login
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>
@@ -92,14 +142,14 @@ export const FrontLayout = () => {
                     <i className="fas fa-heart me-2"></i>
                     <span id="header-favorite">0</span>
                   </a>
-                  <a href="cart.html" className="header-item">
+                  <Link to="/cart" className="header-item">
                     <i className="fas fa-shopping-bag me-2"></i>
                     <span id="header-qty" className="me-3">
-                      2
+                      {qty}
                     </span>
                     <i className="fas fa-money-bill-wave me-2"></i>
-                    <span id="header-price">$4,000</span>
-                  </a>
+                    <span id="header-price">Rs. {price}</span>
+                  </Link>
                 </div>
               </div>
 
@@ -120,20 +170,28 @@ export const FrontLayout = () => {
                           Home <span className="sr-only">(current)</span>
                         </a>
                       </li>
-                     <NavDropdown title="Categories">
-                        {categories.map(category=><Link to={`/category/${category._id}`} className="dropdown-item" key={categories._id}>
-                        {category.name}
-                        </Link>)}
-                         
-                     </NavDropdown>
-                     <NavDropdown title="Brands">
-                        {brands.map(brand=><Link to={`/brand/${brand._id}`} className="dropdown-item" key={brand._id}>
-                        {brand.name}
-                        </Link>)}
-                         
-                     </NavDropdown>
-                    
-                      
+                      <NavDropdown title="Categories">
+                        {categories.map((category) => (
+                          <Link
+                            to={`/category/${category._id}`}
+                            className="dropdown-item"
+                            key={categories._id}
+                          >
+                            {category.name}
+                          </Link>
+                        ))}
+                      </NavDropdown>
+                      <NavDropdown title="Brands">
+                        {brands.map((brand) => (
+                          <Link
+                            to={`/brand/${brand._id}`}
+                            className="dropdown-item"
+                            key={brand._id}
+                          >
+                            {brand.name}
+                          </Link>
+                        ))}
+                      </NavDropdown>
                     </ul>
                   </div>
                 </nav>
